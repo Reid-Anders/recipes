@@ -12,6 +12,13 @@
 
         <h1>My Recipes</h1>
 
+        <table>
+            <tr th:each="recipe : ${recipes}">
+                <td th:text="${recipe.id}">123</td>
+                <td th:text="${recipe.description}">So tastey</td>
+            </tr>
+        </table>
+
     </body>
 
 </html>

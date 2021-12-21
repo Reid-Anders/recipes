@@ -1,6 +1,7 @@
 package anderson.reid.recipes.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -16,6 +17,8 @@ public class Recipe {
    private Integer servings;
    private String source;
    private String url;
+
+   @Lob
    private String directions;
 
    @Lob
@@ -26,7 +29,7 @@ public class Recipe {
 
    //cascade: changes to this class cascade into other classes
    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
-   private Set<Ingredient> ingredients;
+   private Set<Ingredient> ingredients = new HashSet<>();
 
    //ordinal is default for enumtype: will persist difficulty as 1, 2, and 3
    //string stores the enumeration values as strings in the db
@@ -37,7 +40,11 @@ public class Recipe {
    //joined on joincolumns (recipe_id) and from the other class inversejoincolumns (category_id)
    @ManyToMany
    @JoinTable(name = "recipe_category", joinColumns = @JoinColumn(name = "recipe_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
-   private Set<Category> categories;
+   private Set<Category> categories = new HashSet<>();
+
+   public void addIngredient(Ingredient ingredient) {
+      ingredients.add(ingredient);
+   }
 
    public Long getId() {
       return id;
@@ -117,10 +124,6 @@ public class Recipe {
 
    public void setNotes(Notes notes) {
       this.notes = notes;
-   }
-
-   public Set<Ingredient> getIngredients() {
-      return ingredients;
    }
 
    public void setIngredients(Set<Ingredient> ingredients) {
